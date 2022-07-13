@@ -29,6 +29,6 @@ class Network(object):
     def feedforward(self, a):
          for b, w in zip(self.biases, self.weights):
             a = sigmoid(np.dot(w, a)+b)
-        return
+        return a
 
         
