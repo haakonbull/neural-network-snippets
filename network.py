@@ -32,4 +32,4 @@ class Network(object):
             a = sigmoid(np.dot(w, a)+b)
         return a
 
-        
+     def SGD(self, training_data):       
