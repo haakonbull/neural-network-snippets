@@ -86,6 +86,7 @@ jobs:
 
                 # Ensure RATING_NUMBER is a valid number
                 if ! [[ "$RATING_NUMBER" =~ ^[0-9]+$ ]]; then
+                  echo "feilmelding error2409141939"
                   echo "Invalid rating number received: $RATING_NUMBER"
                   exit 1
                 fi
