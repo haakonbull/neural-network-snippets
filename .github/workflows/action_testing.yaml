@@ -72,13 +72,17 @@ jobs:
 
 
                 ### -------------------- Take prompt and send to LLM. Get back MESSAGE, which is a string --------------------
-                RATING_API_RESPONSE="4"
+                RATING_API_RESPONSE="the rating of the text was 4 1 _"
                 echo "RATING_API_RESPONSE___: $RATING_API_RESPONSE"
 
                 ### ____________________ Take prompt and send to LLM. Get back MESSAGE, which is a string ____________________
 
                 echo "Kom eg hit? 240914194242"
 
+                # Extract the first number between 0 and 9 from RATING_API_RESPONSE
+                RATING_NUMBER=$(echo "$RATING_API_RESPONSE" | grep -oE '[0-9]' | head -n 1)
+                echo "RATING_NUMBER extracted waszz: $RATING_NUMBER"
+                
                 ## -------------------- DEFIDE IF TO POST COMMENT OR NOT -------------------- 
                 # Parse the API response to extract the rating
                 #RATING_MESSAGE=$(echo "$RATING_API_RESPONSE" | jq -r '.choices[0].message.content')
