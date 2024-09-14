@@ -55,5 +55,25 @@ jobs:
                 ## __________ Define PROMPT __________
 
 
+
+                ## ---------- Define PAYLOAD ----------
+                # Create the payload using jq to ensure valid JSON
+                PAYLOAD=$(jq -n --arg model "gpt-4o" --arg content "$PROMPT" --argjson stream false --arg max_tokens 500 
+                '{
+                  model: $model,
+                  messages: [
+                    {
+                      role: "user",
+                      content: $content
+                    }
+                  ],
+                  stream: $stream,
+                  max_tokens: ($max_tokens | tonumber)
+                }')
+                echo "PAYLOAD izz: $PAYLOAD"
+                echo "Define payload finito"
+                ## __________ Define PAYLOAD __________
+
+
               env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
