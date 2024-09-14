@@ -9,37 +9,100 @@ jobs:
             contents: read
             issues: write
         steps:
-            - name: step-1
+            - name: step1-Install JQ
               run: |
                 sudo apt-get update
                 sudo apt-get install -y jq curl gh
-                      
-            - name: step-2  #variables from step1 is not accessible here in step2
-              id: the_id_to_step_2
+            - name: step2-Call Zoo first time
+              id: zoo
               run: |
-                MESSAGE="Hello, this is from step-2!"
-                echo "The message is: $MESSAGE"
+                echo "Hello, Zoo!"
+              
+                ## ---------- Get the issue text ---------- 
+                # Get the issue description
+                ISSUE_DESCRIPTION=$(jq -r '.issue.body' $GITHUB_EVENT_PATH)
+                echo "ISSUE_DESCRIPTION: $ISSUE_DESCRIPTION"
 
-            - name: step-3  #variables from step1 is not accessible here in step2
-              id: the_id_to_step_3
-              run: |
-                echo "The message is: $MESSAGE"
-            
+                # Get the issue title
+                ISSUE_TITLE=$(jq -r '.issue.title' $GITHUB_EVENT_PATH)
+                echo "ISSUE_TITLE: $ISSUE_TITLE"
+                ## __________ Get the issue text __________
+
+
+
+                ## ---------- Define PROMPT ----------
+
+                # Define the prompt using printf
+                PROMPT=$(printf '%s\n' \
+                "Please provide a concise and short bulletpoint list of things that can be improved about the following issue description." \
+                "Focus on clarity, how the proposed change can provide value, and if the proposed change considers its surrounding context." \
+                "" \
+                "Remember what a good issue for value-driven development looks like." \
+                "Think hard about it. Make sure you don't point out things that are already clear or that are not relevant to the issue." \
+                "At the end of the bulletpoint list, propose an alternate description based on your interpretation of the issue which adheres to your recommendations. " \
+                "Your response must be formated with markdown, and have the bulletpoint list in a collapsed section wrapped in a details tag." \
+                "The summary tag should summarize in one sentence the most important suggestion you have." \
+                "The alternate description should also be in a collapsed section wrapped in a details tag, but with the issue title in the summary tag." \
+                "If you are able to detect any relationships in the original issue description of any reasonable complexity, try to create a mermaid diagram to illustrate it and place it at the end." \
+                "" \
+                "ISSUE TITLE: $ISSUE_TITLE" \
+                "" \
+                "ISSUE DESCRIPTION:" \
+                "$ISSUE_DESCRIPTION")
+
+                echo "PROMPT: $PROMPT"
+                ## __________ Define PROMPT __________
+
+
+
+
+                ## ---------- Define PAYLOAD ----------
+                # Create the payload using jq to ensure valid JSON
+                PAYLOAD=$(jq -n --arg model "gpt-4o" --arg content "$PROMPT" --argjson stream false --arg max_tokens 500 
+                '{
+                  model: $model,
+                  messages: [
+                    {
+                      role: "user",
+                      content: $content
+                    }
+                  ],
+                  stream: $stream,
+                  max_tokens: ($max_tokens | tonumber)
+                }')
+                echo "PAYLOAD: $PAYLOAD"
+                ## __________ Define PAYLOAD __________
+
+
+
+                ## ---------- <Chatgpt: Please answer what this section does ----------  
+                echo "$PAYLOAD" | jq . > /dev/null
+                if [ $? -ne 0 ]; then
+                  echo "Invalid JSON payload"
+                  exit 1
+                fi
+                ## __________ <Chatgpt: Please answer what this section does __________
+                
+
+
+                # ---------- Make LLM Call ----------
+                # Call your API with the issue description
+                API_RESPONSE=$(curl -X POST -H "Content-Type: application/json" -H "User-Agent: GHAction/Issue-Checker" -H "api-key: ${{ secrets.ZOO_API_KEY }}" -d "$PAYLOAD" https://llm.reasoning.innovation.kognitwin.com/proxy/chat/completions)
+                echo "API_RESPONSE: $API_RESPONSE"
+                ## __________ Make LLM Call __________
+
+
+
+                # ---------- Parse result from LLM ----------
+                # Parse the API response to extract the message
+                MESSAGE=$(printf '%s' "$API_RESPONSE" | jq -r '.choices[0].message.content')
+                echo "MESSAGE: $MESSAGE"
+                # __________ Parse result from LLM __________
+
+
                 # ---------- Paste answer to issue ----------
                 # Write the message as a comment on the issue
                 gh issue --repo ${{ github.repository }} comment ${{ github.event.issue.number }} -b "$MESSAGE"
                 ## __________ Paste answer to issue __________
               env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    job-2:
-        runs-on: ubuntu-latest #uses GitHub's hosted Ubuntu runner 
-        permissions:
-            contents: read
-            issues: write
-        steps:
-            - name: job2-step-1
-              run: |
-                MESSAGE="Hello, this is from job-2- step-1!"
-                echo "The message is: $MESSAGE"
-              env:
-                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}            
