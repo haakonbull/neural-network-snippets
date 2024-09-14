@@ -51,6 +51,7 @@ jobs:
                 "$ISSUE_DESCRIPTION")
 
                 echo "PROMPT: $PROMPT"
+                echo "Define Promt finito"
                 ## __________ Define PROMPT __________
 
 
