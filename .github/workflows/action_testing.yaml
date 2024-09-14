@@ -29,7 +29,6 @@ jobs:
                 ## __________ Get the issue text __________
 
 
-
                 ## ---------- DEFINE RATING PROMPT ---------- 
                 # Define the rating prompt
                 RATING_PROMPT=$(printf '%s\n' \
@@ -40,7 +39,6 @@ jobs:
                 "$ISSUE_DESCRIPTION")
 
                 echo "RATING_PROMPT: $RATING_PROMPT"
-
                 ## __________ DEFINE RATING PROMPT __________ 
 
 
@@ -50,21 +48,20 @@ jobs:
                 echo "RATING_API_RESPONSE___: $RATING_API_RESPONSE"
                 ### ____________________ Take prompt and send to LLM. Get back MESSAGE, which is a string ____________________
 
+
+
+                ## -------------------- DEFINE RATING_MESSAGE --------------------
                 echo "Kom eg hit? 240914194242"
+                # Parse the API response to extract the rating
                 RATING_MESSAGE=$RATING_API_RESPONSE
+                #RATING_MESSAGE=$(echo "$RATING_API_RESPONSE" | jq -r '.choices[0].message.content')
                 echo "RATING_MESSAGE wasz: $RATING_MESSAGE"
                 echo "Kom eg hit? 240914195634"
-                
-                # Extract the first number between 0 and 9 from RATING_API_RESPONSE
-                #RATING_MESSAGE=$(echo "$RATING_API_RESPONSE" | grep -oE '[0-9]' | head -n 1)
-                #echo "RATING_NUMBER extracted waszz: $RATING_NUMBER"
-                
-                ## -------------------- DEFIDE IF TO POST COMMENT OR NOT -------------------- 
-                # Parse the API response to extract the rating
-                #RATING_MESSAGE=$(echo "$RATING_API_RESPONSE" | jq -r '.choices[0].message.content')
-                #echo "RATING_MESSAGE: $RATING_MESSAGE"
-                echo "Kom eg hit? 240914194518"
+                ## ____________________ DEFINE RATING_MESSAGE ____________________
 
+
+
+                ## -------------------- EXTRACT RATING_NUMBER --------------------
                 # Extract the number from the response
                 RATING_NUMBER=$(echo "$RATING_MESSAGE" | grep -oE '[0-9]+' | head -n 1)
                 echo "RATING_NUMBER: $RATING_NUMBER"
@@ -77,18 +74,18 @@ jobs:
                   exit 1
                 fi
                  echo "Kom eg hit? 240914194248"
+                ## ____________________ EXTRACT RATING_NUMBER ____________________
+                
 
 
+                ## -------------------- DEFIDE IF TO POST COMMENT OR NOT -------------------- 
                 # Set the threshold value
                 THRESHOLD_VALUE=5
 
-                  # Check if RATING_NUMBER is less than THRESHOLD_VALUE
+                # Check if RATING_NUMBER is less than THRESHOLD_VALUE
                 if [ "$RATING_NUMBER" -lt "$THRESHOLD_VALUE" ]; then
                   echo "Rating ($RATING_NUMBER) is less than threshold ($THRESHOLD_VALUE). Proceeding to critique."
                   echo "Do everything Johannes did 240914"
-
-                  
-
 
                   ## ---------- Define PROMPT ----------
                   echo "Kom eg hit? 240914194257"
