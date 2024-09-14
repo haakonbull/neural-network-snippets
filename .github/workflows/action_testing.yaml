@@ -73,36 +73,5 @@ jobs:
                 echo "PAYLOAD: $PAYLOAD"
                 ## __________ Define PAYLOAD __________
 
-
-
-                ## ---------- <Chatgpt: Please answer what this section does ----------  
-                echo "$PAYLOAD" | jq . > /dev/null
-                if [ $? -ne 0 ]; then
-                  echo "Invalid JSON payload"
-                  exit 1
-                fi
-                ## __________ <Chatgpt: Please answer what this section does __________
-                
-
-
-                # ---------- Make LLM Call ----------
-                # Call your API with the issue description
-                API_RESPONSE=$(curl -X POST -H "Content-Type: application/json" -H "User-Agent: GHAction/Issue-Checker" -H "api-key: ${{ secrets.ZOO_API_KEY }}" -d "$PAYLOAD" https://llm.reasoning.innovation.kognitwin.com/proxy/chat/completions)
-                echo "API_RESPONSE: $API_RESPONSE"
-                ## __________ Make LLM Call __________
-
-
-
-                # ---------- Parse result from LLM ----------
-                # Parse the API response to extract the message
-                MESSAGE=$(printf '%s' "$API_RESPONSE" | jq -r '.choices[0].message.content')
-                echo "MESSAGE: $MESSAGE"
-                # __________ Parse result from LLM __________
-
-
-                # ---------- Paste answer to issue ----------
-                # Write the message as a comment on the issue
-                gh issue --repo ${{ github.repository }} comment ${{ github.event.issue.number }} -b "$MESSAGE"
-                ## __________ Paste answer to issue __________
               env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
