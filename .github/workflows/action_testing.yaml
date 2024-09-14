@@ -31,6 +31,8 @@ jobs:
                 
 
                 ## ---------- Define PROMPT ----------
+                 echo "Kom eg hit? 240914194257"
+
 
                 # Define the prompt using printf
                 PROMPT=$(printf '%s\n' \
@@ -71,18 +73,21 @@ jobs:
 
                 ### -------------------- Take prompt and send to LLM. Get back MESSAGE, which is a string --------------------
                 RATING_API_RESPONSE="the github issue you sent gets a score of 6 rrnt_"
+                echo "RATING_API_RESPONSE___: $RATING_API_RESPONSE"
 
                 ### ____________________ Take prompt and send to LLM. Get back MESSAGE, which is a string ____________________
 
+                echo "Kom eg hit? 240914194242"
 
                 ## -------------------- DEFIDE IF TO POST COMMENT OR NOT -------------------- 
                 # Parse the API response to extract the rating
-                RATING_MESSAGE=$(echo "$RATING_API_RESPONSE" | jq -r '.choices[0].message.content')
-                echo "RATING_MESSAGE: $RATING_MESSAGE"
+                #RATING_MESSAGE=$(echo "$RATING_API_RESPONSE" | jq -r '.choices[0].message.content')
+                #echo "RATING_MESSAGE: $RATING_MESSAGE"
 
                 # Extract the number from the response
                 RATING_NUMBER=$(echo "$RATING_MESSAGE" | grep -oE '[0-9]+' | head -n 1)
                 echo "RATING_NUMBER: $RATING_NUMBER"
+                echo "Kom eg hit? 240914194232"
 
                 # Ensure RATING_NUMBER is a valid number
                 if ! [[ "$RATING_NUMBER" =~ ^[0-9]+$ ]]; then
@@ -90,6 +95,8 @@ jobs:
                   echo "Invalid rating number received: $RATING_NUMBER"
                   exit 1
                 fi
+                 echo "Kom eg hit? 240914194248"
+
 
                 # Set the threshold value
                 THRESHOLD_VALUE=5
