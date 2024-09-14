@@ -1,28 +1,46 @@
-name: ✨ Criticize new issues
+name: This is the name in top of the .yaml file
 on:
     issues:
         types: [opened, reopened]
 jobs:
-    call-zoo:
+    job-1:
         runs-on: ubuntu-latest #uses GitHub's hosted Ubuntu runner 
         permissions:
             contents: read
             issues: write
         steps:
-            - name: Install JQ
+            - name: step-1
               run: |
                 sudo apt-get update
                 sudo apt-get install -y jq curl gh
                       
-            - name: Call Zoo first time
-              id: zoo
+            - name: step-2  #variables from step1 is not accessible here in step2
+              id: the_id_to_step_2
               run: |
-                MESSAGE="Hello, Zoo!"
+                MESSAGE="Hello, this is from step-2!"
                 echo "The message is: $MESSAGE"
-              
+
+            - name: step-3  #variables from step1 is not accessible here in step2
+              id: the_id_to_step_3
+              run: |
+                MESSAGE="Hello, this is from step-3!"
+                echo "The message is: $MESSAGE"
+            
                 # ---------- Paste answer to issue ----------
                 # Write the message as a comment on the issue
                 gh issue --repo ${{ github.repository }} comment ${{ github.event.issue.number }} -b "$MESSAGE"
                 ## __________ Paste answer to issue __________
               env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    job-2:
+        runs-on: ubuntu-latest #uses GitHub's hosted Ubuntu runner 
+        permissions:
+            contents: read
+            issues: write
+        steps:
+            - name: job2-step-1
+              run: |
+                MESSAGE="Hello, this is from job-2- step-1!"
+                echo "The message is: $MESSAGE"
+              env:
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}            
