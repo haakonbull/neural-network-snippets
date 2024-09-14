@@ -13,11 +13,11 @@ jobs:
               run: |
                 sudo apt-get update
                 sudo apt-get install -y jq curl gh
-            - name: step2-Call Zoo first time
+            - name: Call Zoo
               id: zoo
               run: |
                 echo "Hello, Zoo!"
-              
+
                 ## ---------- Get the issue text ---------- 
                 # Get the issue description
                 ISSUE_DESCRIPTION=$(jq -r '.issue.body' $GITHUB_EVENT_PATH)
@@ -28,33 +28,7 @@ jobs:
                 echo "ISSUE_TITLE: $ISSUE_TITLE"
                 ## __________ Get the issue text __________
 
-                
 
-                ## ---------- Define PROMPT ----------
-                 echo "Kom eg hit? 240914194257"
-
-
-                # Define the prompt using printf
-                PROMPT=$(printf '%s\n' \
-                "Please provide a concise and short bulletpoint list of things that can be improved about the following issue description." \
-                "Focus on clarity, how the proposed change can provide value, and if the proposed change considers its surrounding context." \
-                "" \
-                "Remember what a good issue for value-driven development looks like." \
-                "Think hard about it. Make sure you don't point out things that are already clear or that are not relevant to the issue." \
-                "At the end of the bulletpoint list, propose an alternate description based on your interpretation of the issue which adheres to your recommendations. " \
-                "Your response must be formated with markdown, and have the bulletpoint list in a collapsed section wrapped in a details tag." \
-                "The summary tag should summarize in one sentence the most important suggestion you have." \
-                "The alternate description should also be in a collapsed section wrapped in a details tag, but with the issue title in the summary tag." \
-                "If you are able to detect any relationships in the original issue description of any reasonable complexity, try to create a mermaid diagram to illustrate it and place it at the end." \
-                "" \
-                "ISSUE TITLE: $ISSUE_TITLE" \
-                "" \
-                "ISSUE DESCRIPTION:" \
-                "$ISSUE_DESCRIPTION")
-
-                echo "The 2409141841 prommpt is : $PROMPT"
-                echo "Define Promt finito"
-                ## __________ Define PROMPT __________
 
                 ## ---------- DEFINE RATING PROMPT ---------- 
                 # Define the rating prompt
@@ -74,7 +48,6 @@ jobs:
                 ### -------------------- Take prompt and send to LLM. Get back MESSAGE, which is a string --------------------
                 RATING_API_RESPONSE="the rating of__ the text was :{6}:4 1 _"
                 echo "RATING_API_RESPONSE___: $RATING_API_RESPONSE"
-
                 ### ____________________ Take prompt and send to LLM. Get back MESSAGE, which is a string ____________________
 
                 echo "Kom eg hit? 240914194242"
@@ -112,6 +85,36 @@ jobs:
                   # Check if RATING_NUMBER is less than THRESHOLD_VALUE
                 if [ "$RATING_NUMBER" -lt "$THRESHOLD_VALUE" ]; then
                   echo "Rating ($RATING_NUMBER) is less than threshold ($THRESHOLD_VALUE). Proceeding to critique."
+                  echo "Do everything Johannes did 240914"
+
+                  
+
+
+                  ## ---------- Define PROMPT ----------
+                  echo "Kom eg hit? 240914194257"
+
+                  # Define the prompt using printf
+                  PROMPT=$(printf '%s\n' \
+                  "Please provide a concise and short bulletpoint list of things that can be improved about the following issue description." \
+                  "Focus on clarity, how the proposed change can provide value, and if the proposed change considers its surrounding context." \
+                  "" \
+                  "Remember what a good issue for value-driven development looks like." \
+                  "Think hard about it. Make sure you don't point out things that are already clear or that are not relevant to the issue." \
+                  "At the end of the bulletpoint list, propose an alternate description based on your interpretation of the issue which adheres to your recommendations. " \
+                  "Your response must be formated with markdown, and have the bulletpoint list in a collapsed section wrapped in a details tag." \
+                  "The summary tag should summarize in one sentence the most important suggestion you have." \
+                  "The alternate description should also be in a collapsed section wrapped in a details tag, but with the issue title in the summary tag." \
+                  "If you are able to detect any relationships in the original issue description of any reasonable complexity, try to create a mermaid diagram to illustrate it and place it at the end." \
+                  "" \
+                  "ISSUE TITLE: $ISSUE_TITLE" \
+                  "" \
+                  "ISSUE DESCRIPTION:" \
+                  "$ISSUE_DESCRIPTION")
+
+                  echo "The 2409141841 prommpt is : $PROMPT"
+                  echo "Define Promt finito"
+                  ## __________ Define PROMPT __________
+
 
                   # Define the critique prompt
                   CRITIQUE_PROMPT=$(printf '%s\n' \
