@@ -79,7 +79,7 @@ jobs:
 
                 echo "Kom eg hit? 240914194242"
                 RATING_MESSAGE=$RATING_API_RESPONSE
-                echo "RATING_MESSAGE wasz: $RATING_MESSAGE
+                echo "RATING_MESSAGE wasz: $RATING_MESSAGE"
                 echo "Kom eg hit? 240914195634"
                 
                 # Extract the first number between 0 and 9 from RATING_API_RESPONSE
