@@ -72,7 +72,7 @@ jobs:
 
 
                 ### -------------------- Take prompt and send to LLM. Get back MESSAGE, which is a string --------------------
-                RATING_API_RESPONSE="the rating of__ the text was 64 1 _"
+                RATING_API_RESPONSE="the rating of__ the text was :{6}:4 1 _"
                 echo "RATING_API_RESPONSE___: $RATING_API_RESPONSE"
 
                 ### ____________________ Take prompt and send to LLM. Get back MESSAGE, which is a string ____________________
