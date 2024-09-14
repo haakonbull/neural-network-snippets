@@ -50,7 +50,7 @@ jobs:
                 "ISSUE DESCRIPTION:" \
                 "$ISSUE_DESCRIPTION")
 
-                echo "PROMPT: $PROMPT"
+                echo "The 2409141841 prommpt is : $PROMPT"
                 echo "Define Promt finito"
                 ## __________ Define PROMPT __________
 
