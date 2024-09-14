@@ -80,14 +80,13 @@ jobs:
                 echo "Kom eg hit? 240914194242"
 
                 # Extract the first number between 0 and 9 from RATING_API_RESPONSE
-                RATING_NUMBER=$(echo "$RATING_API_RESPONSE" | grep -oE '[0-9]' | head -n 1)
+                RATING_MESSAGE=$(echo "$RATING_API_RESPONSE" | grep -oE '[0-9]' | head -n 1)
                 echo "RATING_NUMBER extracted waszz: $RATING_NUMBER"
                 
                 ## -------------------- DEFIDE IF TO POST COMMENT OR NOT -------------------- 
                 # Parse the API response to extract the rating
                 #RATING_MESSAGE=$(echo "$RATING_API_RESPONSE" | jq -r '.choices[0].message.content')
                 #echo "RATING_MESSAGE: $RATING_MESSAGE"
-                RATING_MESSAGE=$RATING_API_RESPONSE
                 echo "Kom eg hit? 240914194518"
 
                 # Extract the number from the response
