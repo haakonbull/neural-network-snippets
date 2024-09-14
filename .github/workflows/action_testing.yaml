@@ -83,6 +83,8 @@ jobs:
                 # Parse the API response to extract the rating
                 #RATING_MESSAGE=$(echo "$RATING_API_RESPONSE" | jq -r '.choices[0].message.content')
                 #echo "RATING_MESSAGE: $RATING_MESSAGE"
+                RATING_MESSAGE=$RATING_API_RESPONSE
+                echo "Kom eg hit? 240914194518"
 
                 # Extract the number from the response
                 RATING_NUMBER=$(echo "$RATING_MESSAGE" | grep -oE '[0-9]+' | head -n 1)
