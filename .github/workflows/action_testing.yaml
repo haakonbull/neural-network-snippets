@@ -54,25 +54,90 @@ jobs:
                 echo "Define Promt finito"
                 ## __________ Define PROMPT __________
 
+                ## ---------- DEFINE RATING PROMPT ---------- 
+                # Define the rating prompt
+                RATING_PROMPT=$(printf '%s\n' \
+                "Rate the clarity and level of detail of the following GitHub issue description from 1 to 10, where 1 is very unclear and lacking detail, and 10 is extremely clear and detailed." \
+                "Only provide a single number as your response." \
+                "" \
+                "ISSUE DESCRIPTION:" \
+                "$ISSUE_DESCRIPTION")
+
+                echo "RATING_PROMPT: $RATING_PROMPT"
+
+                ## __________ DEFINE RATING PROMPT __________ 
 
 
-                ## ---------- Define PAYLOAD ----------
-                # Create the payload using jq to ensure valid JSON
-                PAYLOAD=$(jq -n --arg model "gpt-4o" --arg content "$PROMPT" --argjson stream false --arg max_tokens 500 
-                '{
-                  model: $model,
-                  messages: [
-                    {
-                      role: "user",
-                      content: $content
-                    }
-                  ],
-                  stream: $stream,
-                  max_tokens: ($max_tokens | tonumber)
-                }')
-                echo "PAYLOAD izz: $PAYLOAD"
-                echo "Define payload finito"
-                ## __________ Define PAYLOAD __________
+
+                ### -------------------- Take prompt and send to LLM. Get back MESSAGE, which is a string --------------------
+                RATING_API_RESPONSE="the github issue you sent gets a score of 6 rrnt_"
+
+                ### ____________________ Take prompt and send to LLM. Get back MESSAGE, which is a string ____________________
+
+
+                ## -------------------- DEFIDE IF TO POST COMMENT OR NOT -------------------- 
+                # Parse the API response to extract the rating
+                RATING_MESSAGE=$(echo "$RATING_API_RESPONSE" | jq -r '.choices[0].message.content')
+                echo "RATING_MESSAGE: $RATING_MESSAGE"
+
+                # Extract the number from the response
+                RATING_NUMBER=$(echo "$RATING_MESSAGE" | grep -oE '[0-9]+' | head -n 1)
+                echo "RATING_NUMBER: $RATING_NUMBER"
+
+                # Ensure RATING_NUMBER is a valid number
+                if ! [[ "$RATING_NUMBER" =~ ^[0-9]+$ ]]; then
+                  echo "Invalid rating number received: $RATING_NUMBER"
+                  exit 1
+                fi
+
+                # Set the threshold value
+                THRESHOLD_VALUE=5
+
+                  # Check if RATING_NUMBER is less than THRESHOLD_VALUE
+                if [ "$RATING_NUMBER" -lt "$THRESHOLD_VALUE" ]; then
+                  echo "Rating ($RATING_NUMBER) is less than threshold ($THRESHOLD_VALUE). Proceeding to critique."
+
+                  # Define the critique prompt
+                  CRITIQUE_PROMPT=$(printf '%s\n' \
+                  "Please provide a concise and short bullet-point list of things that can be improved about the following issue description." \
+                  "Focus on clarity, how the proposed change can provide value, and if the proposed change considers its surrounding context." \
+                  "" \
+                  "Remember what a good issue for value-driven development looks like." \
+                  "Think hard about it. Make sure you don't point out things that are already clear or that are not relevant to the issue." \
+                  "At the end of the bullet-point list, propose an alternate description based on your interpretation of the issue which adheres to your recommendations." \
+                  "Your response must be formatted with markdown, and have the bullet-point list in a collapsed section wrapped in a details tag." \
+                  "The summary tag should summarize in one sentence the most important suggestion you have." \
+                  "The alternate description should also be in a collapsed section wrapped in a details tag, but with the issue title in the summary tag." \
+                  "If you are able to detect any relationships in the original issue description of any reasonable complexity, try to create a mermaid diagram to illustrate it and place it at the end." \
+                  "" \
+                  "ISSUE TITLE: $ISSUE_TITLE" \
+                  "" \
+                  "ISSUE DESCRIPTION:" \
+                  "$ISSUE_DESCRIPTION")
+
+                  echo "CRITIQUE_PROMPT: $CRITIQUE_PROMPT"
+
+                  # Create the payload for the critique
+                  
+
+                  # Validate the JSON payload
+                 
+                  # Call your API to get the critique
+               
+
+                  # Parse the API response to extract the message
+               
+                  # Write the message as a comment on the issue
+                  
+                else
+                  echo "Rating ($RATING_NUMBER) is greater than or equal to threshold ($THRESHOLD_VALUE). No action needed."
+                fi
+
+                
+
+                ## ____________________ DEFIDE IF TO POST COMMENT OR NOT ____________________ 
+
+
 
 
               env:
