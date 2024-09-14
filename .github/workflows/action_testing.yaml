@@ -23,7 +23,6 @@ jobs:
             - name: step-3  #variables from step1 is not accessible here in step2
               id: the_id_to_step_3
               run: |
-                # MESSAGE="Hello, this is from job-1 step-3!"
                 echo "The message is: $MESSAGE"
             
                 # ---------- Paste answer to issue ----------
