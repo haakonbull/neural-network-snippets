@@ -167,7 +167,7 @@ jobs:
 
                 #   # Parse the API response to extract the message
                 #   MESSAGE=$(printf '%s' "$API_RESPONSE" | jq -r '.choices[0].message.content')
-                  MESSAGE="Given rating was  $RANING_NUMBER" #<-- OPS!! Slett!! 
+                  MESSAGE="Given rating was  $RATING_NUMBER" #<-- OPS!! Slett!! 
                   echo "MESSAGE: $MESSAGE"
                   echo "cp 2409160801" 
                   # ____________________ SEND PROMPT TO LLM. GET BACK MESSAGE (REPEATING CODE) ____________________  
