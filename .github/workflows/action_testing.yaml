@@ -75,7 +75,7 @@ jobs:
 
                 # Parse the API response to extract the message
                 #MESSAGE=$(printf '%s' "$API_RESPONSE" | jq -r '.choices[0].message.content')
-                MESSAGE="the rating of__ the text was :{3}:4 1 _" #<-- OPS!! Slett!! 
+                MESSAGE="the rating of__ the text was :{6}:4 1 _" #<-- OPS!! Slett!! 
                 echo "MESSAGE: $MESSAGE"
                 echo "2409160801"
 
