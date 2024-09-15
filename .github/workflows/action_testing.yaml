@@ -33,11 +33,6 @@ jobs:
               id: rate_issue
               run: |
 
-                echo "cp 240915211233"
-                echo "ISSUE_TITLE=$ISSUE_TITLE"
-                echo "ISSUE_DESCRIPTION=$ISSUE_DESCRIPTION"
-
-                echo "cp 240915211240"
                 # Define the prompt using printf
                 PROMPT=$(printf '%s\n' \
                 "The following is a GitHub issue. It should clearly describe what is the problem, any proposed solutions to fix the problem and maybe also one or several next steps to fix it. A good issue description includes relevant context, is easy to understand, concise, and provides enough detail for others to address the problem" \
@@ -51,6 +46,8 @@ jobs:
 
                 echo "PROMPT: $PROMPT"
                 echo "2409160805"
+
+                # -------------------- SEND PROMPT TO LLM. GET BACK MESSAGE (REPEATING CODE) --------------------
 
                 # Create the payload using jq to ensure valid JSON
                 # PAYLOAD=$(jq -n --arg model "gpt-4o" --arg content "$PROMPT" --argjson stream false --arg max_tokens 500 '{
@@ -87,7 +84,9 @@ jobs:
                 #MESSAGE=$(printf '%s' "$API_RESPONSE" | jq -r '.choices[0].message.content')
                 MESSAGE="the rating of__ the text was :{3}:4 1 _" #<-- OPS!! Slett!! 
                 echo "MESSAGE: $MESSAGE"
-                echo "2409160801"  
+                echo "2409160801" 
+
+                # ____________________ SEND PROMPT TO LLM. GET BACK MESSAGE (REPEATING CODE) ____________________  
 
                 # Extract rating number from the response
                 RATING_NUMBER=$(echo "$MESSAGE" | grep -oE '[0-9]+' | head -n 1)
@@ -104,11 +103,13 @@ jobs:
 
                 echo "RATING_NUMBER=$RATING_NUMBER" >> $GITHUB_OUTPUT
 
-
             - name: Comment on Issue
               run: |
                # Set the threshold value
                 THRESHOLD_VALUE=4
+
+                echo "RATING_NUMBER: $RATING_NUMBER"
+                echo "cp 240915212119"
 
                 # Check if RATING_NUMBER is less than THRESHOLD_VALUE
                 if [ "$RATING_NUMBER" -lt "$THRESHOLD_VALUE" ]; then
