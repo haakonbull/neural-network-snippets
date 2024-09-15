@@ -16,7 +16,7 @@ jobs:
             - name: Call Zoo
               id: zoo
               run: |
-                echo "Hello, Zoo!"
+                echo "Hello, Zoo! "
 
                 ## ---------- Get the issue text ---------- 
                 # Get the issue description
