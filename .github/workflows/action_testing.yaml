@@ -27,9 +27,8 @@ jobs:
                 echo "2409160806"
 
                 # Set outputs
-                echo "ISSUE_TITLE=$ISSUE_TITLE >> $GITHUB_ENV
-                echo "ISSUE_DESCRIPTION=$ISSUE_DESCRIPTION" >> $GITHUB_ENV
-                      
+                echo "ISSUE_TITLE=$ISSUE_TITLE" >> $GITHUB_ENV
+                echo "ISSUE_DESCRIPTION=$ISSUE_DESCRIPTION" >> $GITHUB_ENV                      
             - name: Rate Issue Description
               id: rate_issue
               run: |
