@@ -17,13 +17,17 @@ jobs:
 
       - name: step0-defines-variables
         run: |
+          echo "checkpoint 240915104726"
           # Set the variables
           echo "STRING1=hei og hallo" >> $GITHUB_ENV
           echo "NUMBER1=123" >> $GITHUB_ENV
+          echo "checkpoint 240915104732"
 
       - name: step1-refere-to-variables
         run: |
+          echo "checkpoint 240915104525"
           echo "STRING1: $STRING1"
           echo "NUMBER1: $NUMBER1"
+          echo "checkpoint 240915104530"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
