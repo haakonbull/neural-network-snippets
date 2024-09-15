@@ -31,7 +31,8 @@ jobs:
 
                 # Define the prompt using printf
                 PROMPT=$(printf '%s\n' \
-                "The following is a github issue. The githus issue should be it should be clear, consise, and it should be Rate the clarity and level of detail of the following GitHub issue description from 0 to 9, where 0 is very unclear and lacking detail, and 10 is extremely clear and detailed." \
+                "The following is a GitHub issue. It should clearly describe what is the problem, any proposed solutions to fix the problem and maybe also one or several next steps to fix it. A good issue description includes relevant context, is easy to understand, concise, and provides enough detail for others to address the problem" \
+                "Please rate the clarity and completeness of the following GitHub issue description on a scale from 0 to 9, where 0 is extremely unclear and incomplete, and 9 is extremely clear and complete." \
                 "Only provide a single number as your response." \
                 "" \
                    "ISSUE TITLE: $ISSUE_TITLE" \
