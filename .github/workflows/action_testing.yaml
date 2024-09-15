@@ -71,7 +71,7 @@ jobs:
                 # API_RESPONSE=$(curl -X POST -H "Content-Type: application/json" -H "User-Agent: GHAction/Issue-Checker" -H "api-key: ${{ secrets.ZOO_API_KEY }}" -d "$PAYLOAD" https://llm.reasoning.innovation.kognitwin.com/proxy/chat/completions)
                 # echo "API_RESPONSE: $API_RESPONSE"
                 # echo "2409160802"
-                API_RESPONSE="the rating of__ the text was :{6}:4 1 _" #<-- OPS!! Slett!! 
+                API_RESPONSE="the rating of__ the text was :{3}:4 1 _" #<-- OPS!! Slett!! 
 
                 # Parse the API response to extract the message
                 MESSAGE=$(printf '%s' "$API_RESPONSE" | jq -r '.choices[0].message.content')
