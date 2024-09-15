@@ -15,6 +15,7 @@ jobs:
                 sudo apt-get update
                 sudo apt-get install -y jq curl gh
             - name: Get Issue Description
+              run: |
                 # Get the issue description
                 ISSUE_DESCRIPTION=$(jq -r '.issue.body' $GITHUB_EVENT_PATH)
                 echo "ISSUE_DESCRIPTION: $ISSUE_DESCRIPTION"
