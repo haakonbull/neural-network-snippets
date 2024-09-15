@@ -49,43 +49,43 @@ jobs:
                 echo "PROMPT: $PROMPT"
                 echo "cp 2409160805"
 
+                # # -------------------- SEND PROMPT TO LLM. GET BACK MESSAGE (REPEATING CODE) --------------------
+                # # Create the payload using jq to ensure valid JSON
+                # PAYLOAD=$(jq -n --arg model "gpt-4o" --arg content "$PROMPT" --argjson stream false --arg max_tokens 500 '{
+                #   model: $model,
+                #   messages: [
+                #     {
+                #       role: "user",
+                #       content: $content
+                #     }
+                #   ],
+                #   stream: $stream,
+                #   max_tokens: ($max_tokens | tonumber)
+                # }')
 
-                # -------------------- SEND PROMPT TO LLM. GET BACK MESSAGE (REPEATING CODE) --------------------
-                #  # Create the payload using jq to ensure valid JSON
-                #   PAYLOAD=$(jq -n --arg model "gpt-4o" --arg content "$PROMPT" --argjson stream false --arg max_tokens 500 '{
-                #     model: $model,
-                #     messages: [
-                #       {
-                #         role: "user",
-                #         content: $content
-                #       }
-                #     ],
-                #     stream: $stream,
-                #     max_tokens: ($max_tokens | tonumber)
-                #   }')
+                # echo "PAYLOAD: $PAYLOAD"
+                # echo "cp 2409160822"
 
-                #   echo "PAYLOAD: $PAYLOAD"
-                #   echo "cp 2409160822"
+                # # Validate the JSON payload
+                # echo "$PAYLOAD" | jq . > /dev/null
+                # if [ $? -ne 0 ]; then
+                #   echo "Invalid JSON payload"
+                #   exit 1
+                # fi
+                # echo "cp 2409160823"
 
-                #   # Validate the JSON payload
-                #   echo "$PAYLOAD" | jq . > /dev/null
-                #   if [ $? -ne 0 ]; then
-                #     echo "Invalid JSON payload"
-                #     exit 1
-                #   fi
-                #   echo "cp 2409160823"
+                # # Call your API with the issue description
+                # API_RESPONSE=$(curl -X POST -H "Content-Type: application/json" -H "User-Agent: GHAction/Issue-Checker" -H "api-key: ${{ secrets.ZOO_API_KEY }}" -d "$PAYLOAD" https://llm.reasoning.innovation.kognitwin.com/proxy/chat/completions)
+                # echo "API_RESPONSE: $API_RESPONSE"
+                # echo "cp 2409160824"
 
-                #   # Call your API with the issue description
-                #   API_RESPONSE=$(curl -X POST -H "Content-Type: application/json" -H "User-Agent: GHAction/Issue-Checker" -H "api-key: ${{ secrets.ZOO_API_KEY }}" -d "$PAYLOAD" https://llm.reasoning.innovation.kognitwin.com/proxy/chat/completions)
-                #   echo "API_RESPONSE: $API_RESPONSE"
-                #   echo "cp 2409160824"
-
-                #   # Parse the API response to extract the message
-                #   MESSAGE=$(printf '%s' "$API_RESPONSE" | jq -r '.choices[0].message.content')
+                # # Parse the API response to extract the message
+                # MESSAGE=$(printf '%s' "$API_RESPONSE" | jq -r '.choices[0].message.content')
+                # echo "MESSAGE: $MESSAGE"
+                # echo "cp 2409160801" 
+                # # ____________________ SEND PROMPT TO LLM. GET BACK MESSAGE (REPEATING CODE) ____________________  
                 MESSAGE="the rating of__ the text was :{3}:4 1 _" #<-- OPS!! Slett!! 
                 echo "MESSAGE: $MESSAGE"
-                echo "cp 2409160801" 
-                # ____________________ SEND PROMPT TO LLM. GET BACK MESSAGE (REPEATING CODE) ____________________  
 
                 # Extract rating number from the response
                 RATING_NUMBER=$(echo "$MESSAGE" | grep -oE '[0-9]+' | head -n 1)
@@ -135,42 +135,43 @@ jobs:
                   echo "PROMPT: $PROMPT"
                   echo "cp 2409160835"
                   
-                  # -------------------- SEND PROMPT TO LLM. GET BACK MESSAGE (REPEATING CODE) --------------------
-                #  # Create the payload using jq to ensure valid JSON
-                #   PAYLOAD=$(jq -n --arg model "gpt-4o" --arg content "$PROMPT" --argjson stream false --arg max_tokens 500 '{
-                #     model: $model,
-                #     messages: [
-                #       {
-                #         role: "user",
-                #         content: $content
-                #       }
-                #     ],
-                #     stream: $stream,
-                #     max_tokens: ($max_tokens | tonumber)
-                #   }')
+                  # # -------------------- SEND PROMPT TO LLM. GET BACK MESSAGE (REPEATING CODE) --------------------
+                  # # Create the payload using jq to ensure valid JSON
+                  # PAYLOAD=$(jq -n --arg model "gpt-4o" --arg content "$PROMPT" --argjson stream false --arg max_tokens 500 '{
+                  #   model: $model,
+                  #   messages: [
+                  #     {
+                  #       role: "user",
+                  #       content: $content
+                  #     }
+                  #   ],
+                  #   stream: $stream,
+                  #   max_tokens: ($max_tokens | tonumber)
+                  # }')
 
-                #   echo "PAYLOAD: $PAYLOAD"
-                #   echo "cp 2409160822"
+                  # echo "PAYLOAD: $PAYLOAD"
+                  # echo "cp 2409160822"
 
-                #   # Validate the JSON payload
-                #   echo "$PAYLOAD" | jq . > /dev/null
-                #   if [ $? -ne 0 ]; then
-                #     echo "Invalid JSON payload"
-                #     exit 1
-                #   fi
-                #   echo "cp 2409160823"
+                  # # Validate the JSON payload
+                  # echo "$PAYLOAD" | jq . > /dev/null
+                  # if [ $? -ne 0 ]; then
+                  #   echo "Invalid JSON payload"
+                  #   exit 1
+                  # fi
+                  # echo "cp 2409160823"
 
-                #   # Call your API with the issue description
-                #   API_RESPONSE=$(curl -X POST -H "Content-Type: application/json" -H "User-Agent: GHAction/Issue-Checker" -H "api-key: ${{ secrets.ZOO_API_KEY }}" -d "$PAYLOAD" https://llm.reasoning.innovation.kognitwin.com/proxy/chat/completions)
-                #   echo "API_RESPONSE: $API_RESPONSE"
-                #   echo "cp 2409160824"
+                  # # Call your API with the issue description
+                  # API_RESPONSE=$(curl -X POST -H "Content-Type: application/json" -H "User-Agent: GHAction/Issue-Checker" -H "api-key: ${{ secrets.ZOO_API_KEY }}" -d "$PAYLOAD" https://llm.reasoning.innovation.kognitwin.com/proxy/chat/completions)
+                  # echo "API_RESPONSE: $API_RESPONSE"
+                  # echo "cp 2409160824"
 
-                #   # Parse the API response to extract the message
-                #   MESSAGE=$(printf '%s' "$API_RESPONSE" | jq -r '.choices[0].message.content')
+                  # # Parse the API response to extract the message
+                  # MESSAGE=$(printf '%s' "$API_RESPONSE" | jq -r '.choices[0].message.content')
+                  # echo "MESSAGE: $MESSAGE"
+                  # echo "cp 2409160801" 
+                  # # ____________________ SEND PROMPT TO LLM. GET BACK MESSAGE (REPEATING CODE) ____________________  
                   MESSAGE="Given rating was  $RATING_NUMBER" #<-- OPS!! Slett!! 
                   echo "MESSAGE: $MESSAGE"
-                  echo "cp 2409160801" 
-                  # ____________________ SEND PROMPT TO LLM. GET BACK MESSAGE (REPEATING CODE) ____________________  
 
                   # Write the message as a comment on the issue
                   gh issue --repo ${{ github.repository }} comment ${{ github.event.issue.number }} -b "$MESSAGE"
