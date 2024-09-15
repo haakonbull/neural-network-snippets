@@ -19,8 +19,10 @@ jobs:
         run: |
           echo "checkpoint 240915104726"
           # Set the variables
-          echo "STRING1=hei og hallo" >> $GITHUB_ENV
-          echo "NUMBER1=123" >> $GITHUB_ENV
+          "STRING1=hei og hallo" #>> $GITHUB_ENV
+          "NUMBER1=123" #>> $GITHUB_ENV
+          echo "STRING1 = $STRING1" 
+          echo "NUMBER1 = $NUMBER1"
           echo "checkpoint 240915104732"
 
       - name: step1-refere-to-variables
