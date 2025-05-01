@@ -1,96 +1,96 @@
-import { createScopedLogger, ILogger } from '../logger';
-import { clientOptions } from '../../index';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-import { env } from 'process';
-
-//import fetch from "node-fetch"; // fjern hvis Node 18+ eller Deno
-
-// 1) Geokode by til lat/lon
-async function geocodeCity(city: string): Promise<{ lat: string; lon: string }> {
-    console.log("[1] Starter geokoding av:", city);
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}&limit=1`;
-    const res = await fetch(url);
-    console.log("[1] Geokoding HTTP status:", res.status);
-    
-    const data = (await res.json()) as any[];         // ← cast til any[]
-    console.log("[1] Geokoding resultat:", data);
-    if (!data.length) throw new Error(`Ingen koordinater for ${city}`);
-    
-    const lat = parseFloat(data[0].lat).toFixed(4);
-    const lon = parseFloat(data[0].lon).toFixed(4);
-    console.log(`[1] Fant lat/lon = ${lat}, ${lon}`);
-    
-    return { lat, lon };
-  }
-  
-  // 2) Hent rå værdata fra MET API
-  async function fetchWeatherData(lat: string, lon: string): Promise<any> {
-    console.log("[2] Henter værdata for:", lat, lon);
-    const url = `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${lat}&lon=${lon}`;
-    const headers = { "User-Agent": "WeatherScript/1.0 (you@domain.com)" };
-    const res = await fetch(url, { headers });
-    console.log("[2] Vær-API HTTP status:", res.status);
-    
-    const json = (await res.json()) as any;           // ← cast til any
-    console.log("[2] Værdata properties.meta:", json.properties.meta);
-    
-    return json;
-  }
-  
-  // 3) Finn riktig tidspunkt i prognosen
-  async function findEntry(data: any, targetTime: string): Promise<any> {
-    console.log("[3] Leter etter entry for:", targetTime);
-    let entry: any;
-    
-    if (targetTime === "now") {
-      const now = new Date().toISOString();
-      entry = data.properties.timeseries.find((e: any) => e.time >= now);
-      if (!entry) entry = data.properties.timeseries.slice(-1)[0];
-    } else {
-      entry = data.properties.timeseries.find((e: any) =>
-        e.time.startsWith(targetTime)
-      );
-    }
-    
-    if (!entry) throw new Error(`Ingen data for tidspunkt ${targetTime}`);
-    console.log("[3] Valgt entry:", entry.time, entry.data.instant.details);
-    
-    return entry;
-  }
-  
-  // 4) Parse og logg detaljer
-async function logDetails(city: string, lat: string, lon: string, entry: any): Promise<string> {
-    const t = entry.time;
-    const d = entry.data.instant.details;
-    const temp = d.air_temperature;
-    const wind = d.wind_speed;
-    const hum = d.relative_humidity;
-    const sym = entry.data.next_1_hours?.summary?.symbol_code;
-    const rain = entry.data.next_1_hours?.details?.precipitation_amount;
-
-    let details = `Weather in ${city} (${lat},${lon}) at ${t}:\n`;
-    details += `  - Temperature: ${temp}°C\n`;
-    details += `  - Wind: ${wind} m/s\n`;
-    details += `  - Humidity: ${hum}%\n`;
-    if (sym) {
-       details += `  - Weather: ${sym}\n`;
-    }
-    if (rain !== undefined) {
-       details += `  - Precipitation (next hour): ${rain} mm\n`;
-    }
-    return details;
-}
-  
-  // Hovedflyt
-  export async function getWeather(city: string, targetTime: string = "now"): Promise<string> {
-    const { lat, lon } = await geocodeCity(city);
-    const weather = await fetchWeatherData(lat, lon);
-    const entry = await findEntry(weather, targetTime);
-    let weatherDetails = await logDetails(city, lat, lon, entry);
-    weatherDetails = weatherDetails.replace(/[^\x00-\x7F]/g, "");
-    //remove all non ASCII characters from weatherDetails
-    return weatherDetails;
-  }
-  
-
+import { createScopedLogger, ILogger } from '../logger';;
+import { clientOptions } from '../../index';;
+import { exec } from 'child_process';;
+import { promisify } from 'util';;
+import { env } from 'process';;
+;
+//import fetch from "node-fetch"; // fjern hvis Node 18+ eller Deno;
+;
+// 1) Geokode by til lat/lon;
+async function geocodeCity(city: string): Promise<{ lat: string; lon: string }> {;
+    console.log("[1] Starter geokoding av:", city);;
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}&limit=1`;;
+    const res = await fetch(url);;
+    console.log("[1] Geokoding HTTP status:", res.status);;
+    ;
+    const data = (await res.json()) as any[];         // ← cast til any[];
+    console.log("[1] Geokoding resultat:", data);;
+    if (!data.length) throw new Error(`Ingen koordinater for ${city}`);;
+    ;
+    const lat = parseFloat(data[0].lat).toFixed(4);;
+    const lon = parseFloat(data[0].lon).toFixed(4);;
+    console.log(`[1] Fant lat/lon = ${lat}, ${lon}`);;
+    ;
+    return { lat, lon };;
+  };
+  ;
+  // 2) Hent rå værdata fra MET API;
+  async function fetchWeatherData(lat: string, lon: string): Promise<any> {;
+    console.log("[2] Henter værdata for:", lat, lon);;
+    const url = `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${lat}&lon=${lon}`;;
+    const headers = { "User-Agent": "WeatherScript/1.0 (you@domain.com)" };;
+    const res = await fetch(url, { headers });;
+    console.log("[2] Vær-API HTTP status:", res.status);;
+    ;
+    const json = (await res.json()) as any;           // ← cast til any;
+    console.log("[2] Værdata properties.meta:", json.properties.meta);;
+    ;
+    return json;;
+  };
+  ;
+  // 3) Finn riktig tidspunkt i prognosen;
+  async function findEntry(data: any, targetTime: string): Promise<any> {;
+    console.log("[3] Leter etter entry for:", targetTime);;
+    let entry: any;;
+    ;
+    if (targetTime === "now") {;
+      const now = new Date().toISOString();;
+      entry = data.properties.timeseries.find((e: any) => e.time >= now);;
+      if (!entry) entry = data.properties.timeseries.slice(-1)[0];;
+    } else {;
+      entry = data.properties.timeseries.find((e: any) =>;
+        e.time.startsWith(targetTime);
+      );;
+    };
+    ;
+    if (!entry) throw new Error(`Ingen data for tidspunkt ${targetTime}`);;
+    console.log("[3] Valgt entry:", entry.time, entry.data.instant.details);;
+    ;
+    return entry;;
+  };
+  ;
+  // 4) Parse og logg detaljer;
+async function logDetails(city: string, lat: string, lon: string, entry: any): Promise<string> {;
+    const t = entry.time;;
+    const d = entry.data.instant.details;;
+    const temp = d.air_temperature;;
+    const wind = d.wind_speed;;
+    const hum = d.relative_humidity;;
+    const sym = entry.data.next_1_hours?.summary?.symbol_code;;
+    const rain = entry.data.next_1_hours?.details?.precipitation_amount;;
+;
+    let details = `Weather in ${city} (${lat},${lon}) at ${t}:\n`;;
+    details += `  - Temperature: ${temp}°C\n`;;
+    details += `  - Wind: ${wind} m/s\n`;;
+    details += `  - Humidity: ${hum}%\n`;;
+    if (sym) {;
+       details += `  - Weather: ${sym}\n`;;
+    };
+    if (rain !== undefined) {;
+       details += `  - Precipitation (next hour): ${rain} mm\n`;;
+    };
+    return details;;
+};
+  ;
+  // Hovedflyt;
+  export async function getWeather(city: string, targetTime: string = "now"): Promise<string> {;
+    const { lat, lon } = await geocodeCity(city);;
+    const weather = await fetchWeatherData(lat, lon);;
+    const entry = await findEntry(weather, targetTime);;
+    let weatherDetails = await logDetails(city, lat, lon, entry);;
+    weatherDetails = weatherDetails.replace(/[^\x00-\x7F]/g, "");;
+    //remove all non ASCII characters from weatherDetails;
+    return weatherDetails;;
+  };
+  ;
+;
